@@ -7,8 +7,8 @@ export type Cache<T extends object> = {
 };
 
 export type CacheValue<T extends object, P extends RecursiveKeys<T>> = {
-  onChange: ChangeListener<Value<T, P>>;
+  onChange: WatcherCallback<Value<T, P>>;
   once: boolean;
 };
 
-export type ChangeListener<V> = (newValue: V, oldValue: V) => void | V;
+export type WatcherCallback<V> = (newValue: V, oldValue: V) => void | V;
