@@ -69,14 +69,7 @@ function influer<T extends object>(
   };
 }
 
+// Add influer to the window object if we are in the browser
 if (typeof window !== 'undefined') {
   window.influer = influer;
 }
-
-declare global {
-  interface Window {
-    influer: typeof influer
-  }
-}
-
-export default influer;
