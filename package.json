@@ -1,0 +1,53 @@
+{
+  "name": "influer",
+  "version": "1.0.0",
+  "description": "A tiny (<1 KB) reactivity library",
+  "author": "Tom Lienard",
+  "license": "MIT",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.esm.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/index.iife.js",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs.js",
+      "default": "./dist/index.esm.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QuiiBz/influer.git"
+  },
+  "keywords": [
+    "vue"
+  ],
+  "bugs": {
+    "url": "https://github.com/QuiiBz/influer/issues"
+  },
+  "homepage": "https://github.com/QuiiBz/influer#readme",
+  "scripts": {
+    "watch": "esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js --watch",
+    "build": "yarn build:types && yarn build:cjs && yarn build:esm && yarn build:iife",
+    "build:types": "tsc -p tsconfig.build.json",
+    "build:cjs": "esbuild src/index.ts --bundle --minify --format=cjs --outfile=dist/index.cjs.js",
+    "build:esm": "esbuild src/index.ts --bundle --minify --format=esm --outfile=dist/index.esm.js",
+    "build:iife": "esbuild src/index.ts --bundle --minify --format=iife --outfile=dist/index.iife.js",
+    "test": "yarn test:eslint && yarn test:jest",
+    "test:eslint": "eslint . --ext .ts",
+    "test:jest": "jest --no-watchman"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "@typescript-eslint/eslint-plugin": "^4.4.1",
+    "esbuild": "^0.12.14",
+    "eslint": "^7.30.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-plugin-import": "^2.22.0",
+    "jest": "^27.0.6",
+    "ts-jest": "^27.0.3",
+    "typescript": "^4.3.5"
+  }
+}
