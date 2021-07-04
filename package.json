@@ -22,7 +22,7 @@
     "url": "git+https://github.com/QuiiBz/influer.git"
   },
   "keywords": [
-    "vue"
+    "reactivity", "state", "library", "typescript"
   ],
   "bugs": {
     "url": "https://github.com/QuiiBz/influer/issues"
