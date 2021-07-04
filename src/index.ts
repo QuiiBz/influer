@@ -39,7 +39,6 @@ export default function influer<T extends object>(
        * of objects in the state.
        */
       if (typeof value === 'object' && Object.keys(value).length > 0) {
-        // @ts-ignore
         return new Proxy(value, handler(constructPropertyKey(property, key)));
       }
 
@@ -83,13 +82,13 @@ export default function influer<T extends object>(
     key: P,
     onChange: WatcherCallback<Value<T, P>>,
   ) => {
-    cache[key as Keys] = {
+    cache[key] = {
       onChange,
       once,
     };
 
     // An `unwatch` function used to unwatch the property
-    return () => unwatch(key as Keys);
+    return () => unwatch(key);
   };
 
   return {

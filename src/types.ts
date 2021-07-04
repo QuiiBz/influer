@@ -1,4 +1,3 @@
-export type RecursiveKeys<TObj extends object> = { [TKey in keyof TObj & (string | number)]: TObj[TKey] extends object ? `${TKey}` | `${TKey}.${RecursiveKeys<TObj[TKey]>}` : `${TKey}`; }[keyof TObj & (string | number)];
 /**
  * An utility type to get all the keys of an object in a dot-notation.
  *
@@ -12,6 +11,9 @@ export type RecursiveKeys<TObj extends object> = { [TKey in keyof TObj & (string
  *
  * type Keys = RecursiveKeys<typeof obj>; // 'a.b' | 'd'
  */
+export type RecursiveKeys<T> = T extends object ? {
+  [K in Extract<keyof T, string>]: K | `${K}.${RecursiveKeys<T[K]>}`
+}[Extract<keyof T, string>] : never;
 
 /**
  * An utility type to get the type of the given key (in dot-notation)
@@ -35,7 +37,6 @@ export type Value<T, K> = K extends `${infer FK}.${infer L}` ? FK extends keyof 
  * key, and the value is a CacheValue.
  */
 export type Cache<T extends object> = {
-  // @ts-ignore
   [P in RecursiveKeys<T>]?: CacheValue<T, P>;
 };
 
