@@ -99,7 +99,7 @@ watch('user.firstname', (current, previous) => ...);
 
 As you can see, you must pass a watcher callback as a second argument, which will be called when the property linked to the key will be updated.
 
-This watcher callback gives you the current and the previous value of the property. If you return something which is not `null` or `undefined` inside this watcher callback, the value of this property will be updated to the one returned.
+This watcher callback gives you the current and the previous value of the property. If you return something which is not `void` inside this watcher callback, the value of this property will be updated to the one returned.
 ```ts
 watch('user.firstname', (current) => {
     if(current === 'John') {
