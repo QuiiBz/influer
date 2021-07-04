@@ -1,6 +1,6 @@
 {
   "name": "influer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A tiny (<1 KB) reactivity library",
   "author": "Tom Lienard",
   "license": "MIT",
