@@ -19,6 +19,7 @@ export default function influer<T extends object>(
   // Unwatch a property by its key
   const unwatch = (key: Keys) => delete cache[key];
 
+  // Construct the next property key in a dot-notation
   const constructPropertyKey = (property: string | symbol, key?: Keys): Keys => (key ? `${key.toString()}.${property.toString()}` : property.toString()) as Keys;
 
   /**
@@ -34,7 +35,7 @@ export default function influer<T extends object>(
 
       /**
        * If the value is an object, we need to wrap it in a proxy
-       * to intercept all the futur changes. This allow nesting
+       * to intercept all the future changes. This allow nesting
        * of objects in the state.
        */
       if (typeof value === 'object' && Object.keys(value).length > 0) {
