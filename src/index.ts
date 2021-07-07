@@ -1,7 +1,5 @@
-import {
-  WatcherCallback, Value, RecursiveKeys, Cache,
-} from './types';
-import recompose from './utils';
+import { WatcherCallback, Value, RecursiveKeys, Cache } from './types'
+import recompose from './utils'
 
 /**
  * Generate a `state`, `watch` and `watchOnce` functions for a
@@ -10,16 +8,15 @@ import recompose from './utils';
  * @param {Object} initialState - The state to generate the functions for.
  * @returns The `state`, `watch` and `watchOnce` functions.
  */
-export default function influer<T extends object>(
-  initialState: T,
-) {
-  type Keys = RecursiveKeys<T>;
-  const cache: Cache<T> = {};
+export default function influer<T extends object>(initialState: T) {
+  type Keys = RecursiveKeys<T>
+  const cache: Cache<T> = {}
 
   // Unwatch a property by its key
-  const unwatch = (key: Keys) => delete cache[key];
+  const unwatch = (key: Keys) => delete cache[key]
 
-  const constructPropertyKey = (property: string | symbol, key?: Keys): Keys => (key ? `${key.toString()}.${property.toString()}` : property.toString()) as Keys;
+  const constructPropertyKey = (property: string | symbol, key?: Keys): Keys =>
+    (key ? `${key.toString()}.${property.toString()}` : property.toString()) as Keys
 
   /**
    * Get an handler for a key.
@@ -30,7 +27,7 @@ export default function influer<T extends object>(
   const handler = <K extends object>(key?: Keys): ProxyHandler<K> => ({
     get(target, property, receiver) {
       // Trick to get types working
-      const value = target[property as keyof K] as unknown as object;
+      const value = target[property as keyof K] as unknown as object
 
       /**
        * If the value is an object, we need to wrap it in a proxy
@@ -39,15 +36,15 @@ export default function influer<T extends object>(
        */
       if (typeof value === 'object' && Object.keys(value).length > 0) {
         // @ts-ignore
-        return new Proxy(value, handler(constructPropertyKey(property, key)));
+        return new Proxy(value, handler(constructPropertyKey(property, key)))
       }
 
-      return Reflect.get(target, property, receiver);
+      return Reflect.get(target, property, receiver)
     },
     set(target, property, value, receiver) {
-      const propertyKey = constructPropertyKey(property, key);
-      const cacheValue = cache[propertyKey];
-      let newValue = value;
+      const propertyKey = constructPropertyKey(property, key)
+      const cacheValue = cache[propertyKey]
+      let newValue = value
 
       /**
        * If we currently have a value in the cache (= we have a watcher),
@@ -56,20 +53,20 @@ export default function influer<T extends object>(
        * property.
        */
       if (cacheValue) {
-        const { onChange, once } = cacheValue!;
+        const { onChange, once } = cacheValue!
 
         if (once) {
-          unwatch(propertyKey);
+          unwatch(propertyKey)
         }
 
-        newValue = onChange(newValue, recompose(initialState, propertyKey)) || newValue;
+        newValue = onChange(newValue, recompose(initialState, propertyKey)) || newValue
       }
 
-      return Reflect.set(target, property, newValue, receiver);
+      return Reflect.set(target, property, newValue, receiver)
     },
-  });
+  })
 
-  const state = new Proxy(initialState, handler());
+  const state = new Proxy(initialState, handler())
 
   /**
    * Watch a property by its key. We use a curry function
@@ -78,27 +75,26 @@ export default function influer<T extends object>(
    * @param {boolean} once - If the property should be unwatched after the first call.
    * @returns A function that allow watching a property by its key, using a watcher callback.
    */
-  const watch = (once: boolean) => <P extends Keys>(
-    key: P,
-    onChange: WatcherCallback<Value<T, P>>,
-  ) => {
-    cache[key as Keys] = {
-      onChange,
-      once,
-    };
+  const watch =
+    (once: boolean) =>
+    <P extends Keys>(key: P, onChange: WatcherCallback<Value<T, P>>) => {
+      cache[key as Keys] = {
+        onChange,
+        once,
+      }
 
-    // An `unwatch` function used to unwatch the property
-    return () => unwatch(key as Keys);
-  };
+      // An `unwatch` function used to unwatch the property
+      return () => unwatch(key as Keys)
+    }
 
   return {
     state,
     watch: watch(false),
     watchOnce: watch(true),
-  };
+  }
 }
 
 // Add influer to the window object if we are in the browser
 if (typeof window !== 'undefined') {
-  window.influer = influer;
+  window.influer = influer
 }

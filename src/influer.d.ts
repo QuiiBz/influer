@@ -1,4 +1,4 @@
-import influer from '.';
+import influer from '.'
 
 declare global {
   interface Window {

@@ -2,10 +2,10 @@
  * @jest-environment jsdom
  */
 
-import '../src';
+import '../src'
 
 describe('default function', () => {
   it('should be defined in window', () => {
-    expect(window.influer).toBeDefined();
-  });
-});
+    expect(window.influer).toBeDefined()
+  })
+})
