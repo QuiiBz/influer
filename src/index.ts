@@ -1,6 +1,4 @@
-import {
-  WatcherCallback, Value, RecursiveKeys, Cache,
-} from './types';
+import { WatcherCallback, Value, RecursiveKeys, Cache } from './types';
 import recompose from './utils';
 
 /**
@@ -10,9 +8,7 @@ import recompose from './utils';
  * @param {Object} initialState - The state to generate the functions for.
  * @returns The `state`, `watch` and `watchOnce` functions.
  */
-export default function influer<T extends object>(
-  initialState: T,
-) {
+export default function influer<T extends object>(initialState: T) {
   type Keys = RecursiveKeys<T>;
   const cache: Cache<T> = {};
 
@@ -20,7 +16,8 @@ export default function influer<T extends object>(
   const unwatch = (key: Keys) => delete cache[key];
 
   // Construct the next property key in a dot-notation
-  const constructPropertyKey = (property: string | symbol, key?: Keys): Keys => (key ? `${key.toString()}.${property.toString()}` : property.toString()) as Keys;
+  const constructPropertyKey = (property: string | symbol, key?: Keys): Keys =>
+    (key ? `${key.toString()}.${property.toString()}` : property.toString()) as Keys;
 
   /**
    * Get an handler for a key.
@@ -78,18 +75,17 @@ export default function influer<T extends object>(
    * @param {boolean} once - If the property should be unwatched after the first call.
    * @returns A function that allow watching a property by its key, using a watcher callback.
    */
-  const watch = (once: boolean) => <P extends Keys>(
-    key: P,
-    onChange: WatcherCallback<Value<T, P>>,
-  ) => {
-    cache[key] = {
-      onChange,
-      once,
-    };
+  const watch =
+    (once: boolean) =>
+    <P extends Keys>(key: P, onChange: WatcherCallback<Value<T, P>>) => {
+      cache[key] = {
+        onChange,
+        once,
+      };
 
-    // An `unwatch` function used to unwatch the property
-    return () => unwatch(key);
-  };
+      // An `unwatch` function used to unwatch the property
+      return () => unwatch(key);
+    };
 
   return {
     state,
