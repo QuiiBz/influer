@@ -11,9 +11,11 @@
  *
  * type Keys = RecursiveKeys<typeof obj>; // 'a.b' | 'd'
  */
-export type RecursiveKeys<T> = T extends object ? {
-  [K in Extract<keyof T, string>]: K | `${K}.${RecursiveKeys<T[K]>}`
-}[Extract<keyof T, string>] : never;
+export type RecursiveKeys<T> = T extends object
+  ? {
+      [K in Extract<keyof T, string>]: K | `${K}.${RecursiveKeys<T[K]>}`;
+    }[Extract<keyof T, string>]
+  : never;
 
 /**
  * An utility type to get the type of the given key (in dot-notation)
@@ -29,7 +31,13 @@ export type RecursiveKeys<T> = T extends object ? {
  *
  * type CValue = Value<typeof obj, 'a.b'>; // 'string'
  */
-export type Value<T, K> = K extends `${infer FK}.${infer L}` ? FK extends keyof T ? Value<T[FK], L> : never : K extends keyof T ? T[K] : never;
+export type Value<T, K> = K extends `${infer FK}.${infer L}`
+  ? FK extends keyof T
+    ? Value<T[FK], L>
+    : never
+  : K extends keyof T
+  ? T[K]
+  : never;
 
 /**
  * The cache is a key-value object that contains all the watched

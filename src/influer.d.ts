@@ -2,6 +2,6 @@ import influer from '.';
 
 declare global {
   interface Window {
-    influer: typeof influer
+    influer: typeof influer;
   }
 }
